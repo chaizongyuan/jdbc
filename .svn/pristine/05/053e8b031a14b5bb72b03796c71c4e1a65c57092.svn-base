@@ -1,0 +1,49 @@
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+public class TestOracleLogin {
+	/**
+	 * 用于格式化转换日期
+	 */
+	static SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MMM-DD hh:mm:ss");
+	public static void main(String[] args) {
+		/**
+		 * jdbc链接的数据服务器的ip 端口 数据库名
+		 *mysql url是jdbc:mysal://ip地址:3306/数据库名
+		 *oracle url是 jidc:oracle:thin:@ip地址:1521:sid(orcl)
+		 */
+		String url ="jdbc:oracle://localhost:1521:orcl";
+		//告诉jdbc使用的是什么数据库 不同数据提供一些不同类型
+		String driverClass="oracle.jdbc.OracleDriver";
+		String userName="scott";
+		String password="tiger";
+		//需要jvm加载该类
+		try {
+			Class.forName(driverClass);
+			//登录成功
+			Connection conn= DriverManager.getConnection(url,userName,password);
+			System.out.println(conn);
+			//Statement用于执行静态的sql语句
+			Statement state = conn.createStatement();
+			//ResultSet 游标遍历数据行 next();
+			ResultSet rs = state.executeQuery("select * from emp");
+			while(rs.next()){
+				String ename=rs.getString("ename");//通过列名获取数据
+				double sal = rs.getDouble("sal");
+				//mysql datetime对应java.sql.Timestamp
+				Timestamp borndate = rs.getTimestamp("hiredate");//获取列索引获取数据
+				System.out.println(ename+"--"+sal+"--"+sdf.format(borndate));
+			}
+			
+		} catch (Exception e) {	
+			e.printStackTrace();
+		}
+		
+	}
+}

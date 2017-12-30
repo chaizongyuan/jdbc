@@ -1,0 +1,18 @@
+package jdbc;
+
+//ÔöÉ¾¸ÄÑÝÊ¾
+
+public class CUD {
+	
+	public void insert() throws Exception{
+		
+	}
+	
+	public void update(){
+		
+	}
+	
+	public void delete(){
+		
+	}
+}

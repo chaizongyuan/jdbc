@@ -1,0 +1,44 @@
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+
+public class Query {
+	public static void main(String[] args)throws Exception{
+		query("S",null,"1500");
+	}
+	/**
+	 * 
+	 * @param ename  传入雇员名称
+	 * @param job  传入职位
+	 * @param sal  传入薪水
+	 * @throws Exception
+	 */
+	public static void query(String ename,String job,String sal) throws Exception{
+		String sql="select * from emp where 1=1";
+		if(ename!=null && !"".equals(ename)){
+			sql+=" and ename like '%"+ename+"%'";
+		}
+		if(job!=null && !"".equals(job)){
+			sql+=" and job='"+job+"'";
+		}
+		if(sal!=null && !"".equals(sal)){
+			sql+=" and sal>'"+sal+"'";
+		}
+		System.out.println(sql);
+		Connection conn=DbUtils.getConnection();
+		Statement sta=conn.createStatement();
+		ResultSet rs=sta.executeQuery(sql);
+		while(rs.next()){
+			String enameVar=rs.getString("ename");
+			String salVar=rs.getString("sal");
+			String comm=rs.getString("comm");
+			System.out.println("雇员:"+enameVar+"--奖金:"+comm+"--薪水:"+salVar);
+		}
+		rs.close();
+		sta.close();
+		conn.close();
+	}
+}
